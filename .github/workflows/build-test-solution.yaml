@@ -22,3 +22,9 @@ jobs:
         run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
       - name: Run tests
         run: dotnet test ./src/CopilotMvcMusicStore.Test/CopilotMvcMusicStore.Test.csproj
+      # Publish test results to GitHub Actions build
+      - name: Publish test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Results
+          path: ./src/CopilotMvcMusicStore.Test/TestResults
