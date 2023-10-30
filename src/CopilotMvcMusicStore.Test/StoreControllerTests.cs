@@ -69,8 +69,15 @@ namespace CopilotMvcMusicStore.Test
 
                 // Assert
                 Assert.IsType<ViewResult>(result);
-                Assert.Equal("Rock", ((Genre)((ViewResult)result).Model).Name);
-                Assert.True(((Genre)((ViewResult)result).Model).Albums.Count == 1);
+                var viewResult = (ViewResult)result;
+                Assert.NotNull(viewResult);
+
+                Assert.NotNull(viewResult.Model);
+                var model = (Genre)viewResult.Model;
+                Assert.NotNull(model);
+
+                Assert.Equal("Rock", model.Name);
+                Assert.True(model.Albums.Count == 1);
             }
         }
 
@@ -97,9 +104,16 @@ namespace CopilotMvcMusicStore.Test
 
                 // Assert
                 Assert.IsType<ViewResult>(result);
-                Assert.Equal("Test Album", ((Album)((ViewResult)result).Model).Title);
-                Assert.Equal("Test Artist", ((Album)((ViewResult)result).Model).Artist.Name);
-                Assert.Equal("Rock", ((Album)((ViewResult)result).Model).Genre.Name);
+                var viewResult = (ViewResult)result;
+                Assert.NotNull(viewResult);
+
+                Assert.NotNull(viewResult.Model);
+                var model = (Album)viewResult.Model;
+                Assert.NotNull(model);
+
+                Assert.Equal("Test Album", model.Title);
+                Assert.Equal("Test Artist", model.Artist?.Name);
+                Assert.Equal("Rock", model.Genre?.Name);
             }
         }
         
