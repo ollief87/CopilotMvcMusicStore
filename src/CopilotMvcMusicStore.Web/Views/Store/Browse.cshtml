@@ -1,0 +1,23 @@
+﻿@* 
+    add model reference for a single genre
+    set viewdata title to "Genre"
+    a DIV with the CSS class "genre" and an unordered HTML list with CSS class "album-list"
+*@
+@model CopilotMvcMusicStore.Web.Models.Genre
+@{
+    ViewData["Title"] = "Genre";
+}
+
+<div class="genre">
+    <h3>@Model.Name</h3>
+    <ul class="album-list">
+        @foreach (var album in Model.Albums)
+        {
+            <li>
+                <a href="@Url.Action("Details", "Store", new { id = album.AlbumId })">
+                    @album.Title
+                </a>
+            </li>
+        }
+    </ul>
+</div>

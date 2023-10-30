@@ -1,0 +1,78 @@
+﻿@* model for enumerable of type album *@
+@model IEnumerable<CopilotMvcMusicStore.Web.Models.Album>
+@* title of Index *@
+@{
+    ViewData["Title"] = "Index";
+}
+@* H2 of index *@
+<h2>Index</h2>
+@* P tage containing actionlink that links to create method and has title "Create New" *@
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@* Table with header row containing columns "Title" "Genre" "Artist" "Price" "Action" *@
+<table>
+    <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Genre
+            </th>
+            <th>
+                Artist
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @* foreach loop that iterates through each album in the model *@
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @* actionlink that links to details method on StoreController and passes in album id *@
+                    <a asp-controller="Store" asp-action="Details" asp-route-id="@item.AlbumId">@item.Title</a>
+                </td>
+                <td>
+                    @* displays genre name *@
+                    @Html.DisplayFor(modelItem => item.Genre!.Name)
+                </td>
+                <td>
+                    @* displays artist name *@
+                    @Html.DisplayFor(modelItem => item.Artist!.Name)
+                </td>
+                <td>
+                    @* displays price *@
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @* actionlink that links to edit method and passes in album id *@
+                    <a asp-action="Edit" asp-route-id="@item.AlbumId">Edit</a> |
+                    @* actionlink that links to delete method and passes in album id - this should call the JavaScript confirmDelete method on click *@
+                    <a asp-action="Delete" asp-route-id="@item.AlbumId" onclick="return confirmDelete()">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* Script block - One JavaScript method to handle the OnClick of the Delete Action
+    - The method should prompt the user to confirm the delete
+    - If the user confirms the delete, the method should redirect to the Delete Action
+    - If the user cancels the delete, the method should return false
+    - The method should be called from the Delete ActionLinks
+*@
+<script>
+    function confirmDelete() {
+        // Browser confirm dialog
+        var result = confirm("Are you sure you want to delete this album?");
+        return result;
+    }
+</script>
