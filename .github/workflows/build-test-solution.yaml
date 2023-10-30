@@ -21,11 +21,11 @@ jobs:
       - name: Build solution
         run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
       - name: Run tests
-        run: dotnet test ./src/CopilotMvcMusicStore.Test/CopilotMvcMusicStore.Test.csproj --logger "trx;LogFileName=TestResults/test_results.trx"
+        run: dotnet test ./src/CopilotMvcMusicStore.Test/CopilotMvcMusicStore.Test.csproj --logger "trx;LogFileName=test_results.trx"
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
             files: |
-                TestResults/**/*.trx
+                '**/TestResults/*.trx'
       
