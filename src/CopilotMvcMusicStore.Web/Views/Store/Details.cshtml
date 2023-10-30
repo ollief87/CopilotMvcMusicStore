@@ -1,0 +1,33 @@
+﻿@model CopilotMvcMusicStore.Web.Models.Album
+@{
+    // title in format "Album - Title"
+    ViewData["Title"] = "Album - " + Model.Title;
+}
+<h2>Album: @Model.Title</h2>
+
+@* style block - image class for album-image with max size of 800px * 600px *@
+<style>
+    .album-image {
+        max-height: 600px;
+        max-width: 800px;
+    }
+</style>
+
+@* paragraph with album image, album title as ALT tag, image referencing AlbumArtUrl *@
+<p>
+    <img class="album-image" src="@Model.AlbumArtUrl" alt="@Model.Title" />
+</p>
+
+@* DIV with css class "album-details" *@
+<div class="album-details">
+<h3>Album Details</h3>
+    <dl>
+        @* list of album details *@
+        <dt>Genre:</dt>
+        <dd>@Model.Genre?.Name</dd>
+        <dt>Artist:</dt>
+        <dd>@Model.Artist?.Name</dd>
+        <dt>Price:</dt>
+        <dd>@Model.Price.ToString("c")</dd>
+    </dl>
+</div>

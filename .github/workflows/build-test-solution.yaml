@@ -1,0 +1,24 @@
+# GitHub Action to build & test the CopilotMvcMusicStore solution
+name: Build & Test Solution
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 7.0.x
+      - name: Install dependencies
+        run: dotnet restore ./src/CopilotMvcMusicStore.sln
+      - name: Build solution
+        run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
+      - name: Run tests
+        run: dotnet test ./src/CopilotMvcMusicStore.Tests/CopilotMvcMusicStore.Tests.csproj
