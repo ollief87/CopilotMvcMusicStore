@@ -32,5 +32,5 @@ jobs:
         if: always()
         with:
             files: |
-                '**/TestResults/*.trx'
+                ./src/CopilotMvcMusicStore.Test/TestResults/test_results.trx
       
