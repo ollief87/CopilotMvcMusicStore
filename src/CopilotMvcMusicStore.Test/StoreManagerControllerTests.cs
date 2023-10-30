@@ -50,9 +50,12 @@ namespace CopilotMvcMusicStore.Test
                 Assert.IsType<ViewResult>(result);
                 var viewResult = result as ViewResult;
                 Assert.NotNull(viewResult);
+
+                Assert.IsType<List<Album>>(viewResult.Model);
                 var model = viewResult.Model as List<Album>;
                 Assert.NotNull(model);
                 Assert.Single(model);
+                
                 Assert.Equal(album, model[0]);
                 Assert.Equal(album.Title, model[0].Title);
                 Assert.NotNull(model[0].Artist);

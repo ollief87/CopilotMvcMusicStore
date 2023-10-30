@@ -72,7 +72,7 @@ namespace CopilotMvcMusicStore.Test
                 var viewResult = (ViewResult)result;
                 Assert.NotNull(viewResult);
 
-                Assert.NotNull(viewResult.Model);
+                Assert.IsType<Genre>(viewResult.Model);
                 var model = (Genre)viewResult.Model;
                 Assert.NotNull(model);
 
@@ -107,7 +107,7 @@ namespace CopilotMvcMusicStore.Test
                 var viewResult = (ViewResult)result;
                 Assert.NotNull(viewResult);
 
-                Assert.NotNull(viewResult.Model);
+                Assert.IsType<Album>(viewResult.Model);
                 var model = (Album)viewResult.Model;
                 Assert.NotNull(model);
 
