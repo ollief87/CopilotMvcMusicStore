@@ -15,7 +15,8 @@
 
 @* paragraph with album image, album title as ALT tag, image referencing AlbumArtUrl *@
 <p>
-    <img class="album-image" src="@Model.AlbumArtUrl" alt="@Model.Title" />
+    @* Image with src as AlbumArtUrl. If AlbumArtUrl is empty then use /images/placeholder.gif *@
+    <img class="album-image" alt="@Model.Title" src="@Url.Content(Model.AlbumArtUrl ?? "/images/placeholder.gif")" />
 </p>
 
 @* DIV with css class "album-details" *@

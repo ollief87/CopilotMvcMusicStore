@@ -3,6 +3,13 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">
+        Welcome to the Copilot Mvc Music Store!
+    </h1>
+    @* p tag containing the "images/home-showcase.png" image. The image should link to the Store Controller Index Action *@
+    <p>
+        <a asp-area="" asp-controller="Store" asp-action="Index">
+            <img src="~/images/home-showcase.png" alt="Copilot Mvc Music Store" />
+        </a>
+    </p>
 </div>
