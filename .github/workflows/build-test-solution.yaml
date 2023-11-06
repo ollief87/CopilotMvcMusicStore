@@ -25,7 +25,7 @@ jobs:
         run: dotnet restore ./src/CopilotMvcMusicStore.sln
       # Build SSDT project CopilotMvcMusicStore.Db
       - name: Build DB project
-        run: dotnet build ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj --configuration Release
+        run: dotnet build ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj --configuration Release /p:NetCoreBuild=true
       - name: Build Web project
         run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
       - name: Run unit tests
