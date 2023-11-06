@@ -23,9 +23,12 @@ jobs:
             dotnet-version: 7.0.x
       - name: Install dependencies
         run: dotnet restore ./src/CopilotMvcMusicStore.sln
-      - name: Build solution
+      # Build SSDT project CopilotMvcMusicStore.Db
+      - name: Build DB project
+        run: dotnet build ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj --configuration Release
+      - name: Build Web project
         run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
-      - name: Run tests
+      - name: Run unit tests
         run: dotnet test ./src/CopilotMvcMusicStore.Test/CopilotMvcMusicStore.Test.csproj --logger "trx;LogFileName=test_results.trx"
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2

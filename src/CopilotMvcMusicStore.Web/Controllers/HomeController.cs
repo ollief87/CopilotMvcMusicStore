@@ -1,4 +1,5 @@
-﻿using CopilotMvcMusicStore.Web.Models;
+﻿using CopilotMvcMusicStore.Web.Data;
+using CopilotMvcMusicStore.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,16 +7,19 @@ namespace CopilotMvcMusicStore.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly MusicStoreContext _dbContext;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(MusicStoreContext musicStoreContext, ILogger<HomeController> logger)
         {
+            _dbContext = musicStoreContext;
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            // Return the MusicStoreSummary view, passing in a list of MusicStoreSummary objects
+            return View(_dbContext.MusicStoreSummaries.ToList());
         }
 
         public IActionResult Privacy()

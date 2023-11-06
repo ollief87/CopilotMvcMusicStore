@@ -1,6 +1,15 @@
-﻿@{
+﻿@model IEnumerable<MusicStoreSummary>
+
+@{
     ViewData["Title"] = "Home Page";
 }
+
+<style>
+    .summary-table {
+        max-width: 700px;
+        margin: 15px auto;
+    }
+</style>
 
 <div class="text-center">
     <h1 class="display-4">
@@ -12,4 +21,28 @@
             <img src="~/images/home-showcase.png" alt="Copilot Mvc Music Store" />
         </a>
     </p>
+    @* HTML table to display the IEnumerable<MusicStoreSummary> items *@
+    <table class="table-striped summary-table">
+        <thead>
+            <tr>
+                <th class="text-center">Genre</th>
+                <th class="text-center">Artist Count</th>
+                <th class="text-center">Album Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-area="" asp-controller="Store" asp-action="Browse" asp-route-genre="@item.GenreName">
+                            @item.GenreName
+                        </a>
+                    </td>
+                    <td>@item.ArtistCount</td>
+                    <td>@item.AlbumCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
