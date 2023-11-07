@@ -25,6 +25,8 @@ jobs:
         run: dotnet restore ./src/CopilotMvcMusicStore.sln
       - name: Install dependencies and build DB project
         run: |
+          cd $GITHUB_WORKSPACE
+          pwd
           curl -sSL -o /tmp/sqltools.tar.gz https://github.com/microsoft/sqltoolsservice/releases/download/v3.0.0-release.181/Microsoft.SqlTools.ServiceLayer-rhel-x64-net6.0.tar.gz
           mkdir /tmp/sqltools
           tar -xzf /tmp/sqltools.tar.gz -C /tmp/sqltools
