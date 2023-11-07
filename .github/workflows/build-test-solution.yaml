@@ -23,12 +23,34 @@ jobs:
             dotnet-version: 7.0.x
       - name: Install dependencies
         run: dotnet restore ./src/CopilotMvcMusicStore.sln
-      - name: Build DB project
-        uses: ericsciple/msbuild-action@v1
-        with:
-          solution: ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj
-          configuration: Release
-          msbuildArguments: /p:NetCoreBuild=true
+      - name: Install dependencies and build DB project
+        run: |
+          curl -sSL -o /tmp/sqltools.tar.gz https://github.com/microsoft/sqltoolsservice/releases/download/v3.0.0-release.181/Microsoft.SqlTools.ServiceLayer-rhel-x64-net6.0.tar.gz
+          mkdir /tmp/sqltools
+          tar -xzf /tmp/sqltools.tar.gz -C /tmp/sqltools
+          mkdir BuildDirectory
+          cd /tmp/sqltools
+          cp Microsoft.Data.SqlClient.dll \
+            Microsoft.Data.Tools.Schema.Sql.dll \
+            Microsoft.Data.Tools.Schema.SqlTasks.targets \
+            Microsoft.Data.Tools.Schema.Tasks.Sql.dll \
+            Microsoft.Data.Tools.Utilities.dll \
+            Microsoft.SqlServer.Dac.dll \
+            Microsoft.SqlServer.Dac.Extensions.dll \
+            Microsoft.SqlServer.TransactSql.ScriptDom.dll \
+            Microsoft.SqlServer.Types.dll \
+            System.ComponentModel.Composition.dll \
+            System.IO.Packaging.dll \
+            ../BuildDirectory
+          rm -r /tmp/sqltools
+          dotnet build ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj /p:NetCoreBuild=true /p:NETCoreTargetsPath="BuildDirectory"
+      
+      # - name: Build DB project
+      #   uses: ericsciple/msbuild-action@v1
+      #   with:
+      #     solution: ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj
+      #     configuration: Release
+      #     msbuildArguments: /p:NetCoreBuild=true
       - name: Build Web project
         run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
       - name: Run unit tests
