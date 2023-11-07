@@ -46,6 +46,8 @@ jobs:
           rm -r /tmp/sqltools
           dotnet build ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj --configuration Release /p:NetCoreBuild=true /p:NETCoreTargetsPath="$GITHUB_WORKSPACE/SqlBuildTools"
       - name: Build Web project
+        run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
+      - name: Publish Web project
         run: dotnet publish ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
       - name: Run unit tests
         run: dotnet test ./src/CopilotMvcMusicStore.Test/CopilotMvcMusicStore.Test.csproj --logger "trx;LogFileName=test_results.trx"
@@ -60,4 +62,9 @@ jobs:
         with:
           name: db-artifacts
           path: ./src/CopilotMvcMusicStore.Db/bin/Release
+      - name: Publish Web build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-artifacts
+          path: ./src/CopilotMvcMusicStore.Web/bin/Release/net7.0/publish
       
