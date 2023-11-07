@@ -16,11 +16,13 @@ namespace CopilotMvcMusicStore.Web.Data
             modelBuilder.Entity<Album>().ToTable("Album");
             modelBuilder.Entity<Genre>().ToTable("Genre");
             modelBuilder.Entity<Artist>().ToTable("Artist");
+            modelBuilder.Entity<MusicStoreSummary>().ToView("vwMusicStoreSummary").HasNoKey();
         }
 
         // dbset properties for albums genres and artists
         public DbSet<Album> Albums { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Artist> Artists { get; set; }
+        public DbSet<MusicStoreSummary> MusicStoreSummaries { get; set;}
     }
 }

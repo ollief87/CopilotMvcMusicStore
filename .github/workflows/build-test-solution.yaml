@@ -23,9 +23,34 @@ jobs:
             dotnet-version: 7.0.x
       - name: Install dependencies
         run: dotnet restore ./src/CopilotMvcMusicStore.sln
-      - name: Build solution
-        run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
-      - name: Run tests
+      - name: Install SQL Tools and build DB project
+        run: |
+          # https://github.com/microsoft/sqltoolsservice/releases
+          curl -sSL -o /tmp/sqltools.tar.gz https://github.com/microsoft/sqltoolsservice/releases/download/v3.0.0-release.181/Microsoft.SqlTools.ServiceLayer-rhel-x64-net6.0.tar.gz
+          mkdir /tmp/sqltools
+          tar -xzf /tmp/sqltools.tar.gz -C /tmp/sqltools
+          cd /tmp/sqltools
+          mkdir $GITHUB_WORKSPACE/SqlBuildTools
+          cp Microsoft.Data.SqlClient.dll \
+            Microsoft.Data.Tools.Schema.Sql.dll \
+            Microsoft.Data.Tools.Schema.SqlTasks.targets \
+            Microsoft.Data.Tools.Schema.Tasks.Sql.dll \
+            Microsoft.Data.Tools.Utilities.dll \
+            Microsoft.SqlServer.Dac.dll \
+            Microsoft.SqlServer.Dac.Extensions.dll \
+            Microsoft.SqlServer.TransactSql.ScriptDom.dll \
+            Microsoft.SqlServer.Types.dll \
+            System.ComponentModel.Composition.dll \
+            System.IO.Packaging.dll \
+            $GITHUB_WORKSPACE/SqlBuildTools
+          cd $GITHUB_WORKSPACE
+          rm -r /tmp/sqltools
+          dotnet build ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj --configuration Release /p:NetCoreBuild=true /p:NETCoreTargetsPath="$GITHUB_WORKSPACE/SqlBuildTools"
+      - name: Build Web project
+        run: |
+          dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
+          dotnet publish ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
+      - name: Run unit tests
         run: dotnet test ./src/CopilotMvcMusicStore.Test/CopilotMvcMusicStore.Test.csproj --logger "trx;LogFileName=test_results.trx"
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
@@ -33,4 +58,14 @@ jobs:
         with:
             files: |
                 ./src/CopilotMvcMusicStore.Test/TestResults/test_results.trx
+      - name: Publish DB build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: db-artifacts
+          path: ./src/CopilotMvcMusicStore.Db/bin/Release
+      - name: Publish Web build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-artifacts
+          path: ./src/CopilotMvcMusicStore.Web/bin/Release/net7.0/publish
       
