@@ -26,7 +26,7 @@ jobs:
       - name: Install SQL Tools and build DB project
         run: |
           # https://github.com/microsoft/sqltoolsservice/releases
-          curl -sSL -o /tmp/sqltools.tar.gz https://github.com/microsoft/sqltoolsservice/releases/download/4.10.1.3/Microsoft.SqlTools.ServiceLayer-rhel-x64-net7.0.tar.gz
+          curl -sSL -o /tmp/sqltools.tar.gz https://github.com/microsoft/sqltoolsservice/releases/download/v3.0.0-release.181/Microsoft.SqlTools.ServiceLayer-rhel-x64-net6.0.tar.gz
           mkdir /tmp/sqltools
           tar -xzf /tmp/sqltools.tar.gz -C /tmp/sqltools
           cd /tmp/sqltools
