@@ -23,7 +23,7 @@ jobs:
             dotnet-version: 7.0.x
       - name: Install dependencies
         run: dotnet restore ./src/CopilotMvcMusicStore.sln
-      - name: Install dependencies and build DB project
+      - name: Install SQL Tools and build DB project
         run: |
           curl -sSL -o /tmp/sqltools.tar.gz https://github.com/microsoft/sqltoolsservice/releases/download/v3.0.0-release.181/Microsoft.SqlTools.ServiceLayer-rhel-x64-net6.0.tar.gz
           mkdir /tmp/sqltools
@@ -44,14 +44,8 @@ jobs:
             $GITHUB_WORKSPACE/SqlBuildTools
           cd $GITHUB_WORKSPACE
           rm -r /tmp/sqltools
-          dotnet build ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj /p:NetCoreBuild=true /p:NETCoreTargetsPath="$GITHUB_WORKSPACE/SqlBuildTools"
-      
-      # - name: Build DB project
-      #   uses: ericsciple/msbuild-action@v1
-      #   with:
-      #     solution: ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj
-      #     configuration: Release
-      #     msbuildArguments: /p:NetCoreBuild=true
+          dotnet build ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj --configuration Release /p:NetCoreBuild=true /p:NETCoreTargetsPath="$GITHUB_WORKSPACE/SqlBuildTools"
+          dotnet publish ./src/CopilotMvcMusicStore.Db/CopilotMvcMusicStore.Db.sqlproj -o ./db-artifacts
       - name: Build Web project
         run: dotnet build ./src/CopilotMvcMusicStore.Web/CopilotMvcMusicStore.Web.csproj --configuration Release
       - name: Run unit tests
@@ -62,4 +56,9 @@ jobs:
         with:
             files: |
                 ./src/CopilotMvcMusicStore.Test/TestResults/test_results.trx
+      - name: Upload DB build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: db-artifacts
+          path: ./db-artifacts
       
